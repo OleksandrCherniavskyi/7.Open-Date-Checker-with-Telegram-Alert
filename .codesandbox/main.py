@@ -45,6 +45,7 @@ async def open_date(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         time.sleep(3)
         driver.refresh()
         time.sleep(3)
+        # chose location
         try:
             poland = driver.find_element(By.XPATH, "//button[contains(@class, 'region-expansion-panel')]")
             # poland = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'region-expansion-panel')]"))).click()
@@ -64,6 +65,8 @@ async def open_date(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         except NoSuchElementException:
             driver.quit()
         time.sleep(2)
+        
+        # chose service
         try:
             # Another
             another = driver.find_element(By.CSS_SELECTOR,
@@ -89,6 +92,8 @@ async def open_date(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         except NoSuchElementException:
             driver.quit()
         time.sleep(3)
+        
+        # Check calendar
         try:
             element = driver.find_element(By.XPATH, "//*[contains(text(), 'На вибрану дату немає вільних місць')]")
             next_month = driver.find_element(By.XPATH, "//button[contains(@id, 'nextMonthID')]")
@@ -107,6 +112,7 @@ async def open_date(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             answer = (f"Open date {time_name_2}")
             await update.message.reply_text(answer)
             kontakt = driver.find_element(By.CSS_SELECTOR, "#step3 > div > div > div > div.time-selection-wrapper")
+            # Create screnshot
             screen = kontakt.screenshot(file_name)
             if screen:
                 await context.bot.send_document(chat_id=update.effective_chat.id, document=open(f'{file_name}', 'rb'))
@@ -129,17 +135,19 @@ async def logfile(update, context):
     await context.bot.send_document(chat_id=update.effective_chat.id, document=open('log.txt', 'rb'))
 
 if __name__ == '__main__':
-    application = ApplicationBuilder().token('5954511773:AAH4YsmMQjoPaZfbgDZmMKy2ioV6zv4nP_E').build()
-
+    application = ApplicationBuilder().token('YOUR_TOKEN').build()
+    # Start_command
     start_handler = CommandHandler('start', start)
     application.add_handler(start_handler)
-
+    
+    # Echo_command
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, open_date))
 
     # Custom_command
     logfile = CommandHandler("logfile", logfile)
     application.add_handler(logfile)
-
+    
+    # unknown_command
     unknown_handler = MessageHandler(filters.COMMAND, unknown)
     application.add_handler(unknown_handler)
 
