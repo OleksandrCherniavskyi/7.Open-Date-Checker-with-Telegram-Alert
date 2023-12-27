@@ -11,10 +11,6 @@ This is a small script that checks the availability of open dates on the [mfa.go
 
 ## Installation
 
-### Using Docker
-
-1. In the `.codesandbox` folder, you can find the Dockerfile, requirements.txt, and main.py files.
-2. Build the Docker image and start the container using the provided files.
 
 ### Manual Installation
 
